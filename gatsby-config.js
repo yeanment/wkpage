@@ -4,15 +4,15 @@ module.exports = {
   pathPrefix: process.env.PATH_PREFIX || '/',
   siteMetadata: {
     siteTitle: 'Workouts Map',
-    // siteUrl: 'https://ben29.xyz',
+    siteUrl: 'https://yeanment.github.io/workouts_page/',
     logo: 'https://avatars.githubusercontent.com/u/38305958?v=4',
     description: 'Life itself sucks.',
     keywords: 'workouts, running, cycling, riding, roadtrip, hiking, swimming',
     navLinks: [
-      // {
-      //   name: 'Blog',
-      //   url: 'https://ben29.xyz',
-      // },
+      {
+        name: 'Blog',
+        url: 'https://yeanment.github.io/workouts_page/',
+      },
       {
         name: 'About',
         url: 'https://github.com/yeanment/workouts_page/blob/master/README-CN.md',
