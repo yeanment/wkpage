@@ -54,7 +54,7 @@ GARMIN_CN_URL_DICT = {
 
 # set to True if you want to sync all time activities
 # default only sync last 20
-GET_ALL = False
+GET_ALL = True
 
 
 class Garmin:
@@ -324,17 +324,17 @@ async def download_garmin_data(client, activity_id, file_type="gpx"):
         traceback.print_exc()
 
 
-async def get_activity_id_list(client, start=0):
-    if GET_ALL:
+async def get_activity_id_list(client, start=0, is_getall=False):
+    if is_getall:
         activities = await client.get_activities(start, 100)
         if len(activities) > 0:
             ids = list(map(lambda a: str(a.get("activityId", "")), activities))
             print(f"Syncing Activity IDs")
-            return ids + await get_activity_id_list(client, start + 100)
+            return ids + await get_activity_id_list(client, start + 100, is_getall)
         else:
             return []
     else:
-        activities = await client.get_activities(start, 20)
+        activities = await client.get_activities(start, 40)
         if len(activities) > 0:
             ids = list(map(lambda a: str(a.get("activityId", "")), activities))
             print(f"Syncing Activity IDs")
@@ -358,13 +358,13 @@ def get_downloaded_ids(folder):
 
 
 async def download_new_activities(
-    email, password, auth_domain, downloaded_ids, is_only_running, folder, file_type
+    email, password, auth_domain, downloaded_ids, is_only_running, folder, file_type, is_getall
 ):
     client = Garmin(email, password, auth_domain, is_only_running)
     client.login()
     # because I don't find a para for after time, so I use garmin-id as filename
     # to find new run to generage
-    activity_ids = await get_activity_id_list(client)
+    activity_ids = await get_activity_id_list(client, is_getall=is_getall)
     to_generate_garmin_ids = list(set(activity_ids) - set(downloaded_ids))
     print(f"{len(to_generate_garmin_ids)} new activities to be downloaded")
 
@@ -399,6 +399,12 @@ if __name__ == "__main__":
         help="if is only for running",
     )
     parser.add_argument(
+        "--getall",
+        dest="getall",
+        action="store_true",
+        help="if is get all acitvities",
+    )
+    parser.add_argument(
         "--tcx",
         dest="download_file_type",
         action="store_const",
@@ -422,6 +428,7 @@ if __name__ == "__main__":
     )
     file_type = options.download_file_type
     is_only_running = options.only_run
+    is_getall = options.getall
     if email == None or password == None:
         print("Missing argument nor valid configuration file")
         sys.exit(1)
@@ -441,6 +448,7 @@ if __name__ == "__main__":
             is_only_running,
             folder,
             file_type,
+            is_getall
         )
     )
     loop.run_until_complete(future)
