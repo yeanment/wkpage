@@ -334,7 +334,7 @@ async def get_activity_id_list(client, start=0):
         else:
             return []
     else:
-        activities = await client.get_activities(start, 20)
+        activities = await client.get_activities(start, 40)
         if len(activities) > 0:
             ids = list(map(lambda a: str(a.get("activityId", "")), activities))
             print(f"Syncing Activity IDs")
