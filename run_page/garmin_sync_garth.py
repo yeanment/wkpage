@@ -115,31 +115,6 @@ class Garmin:
             except Exception as err:
                 self.is_login = False
 
-    async def fetch_data(self, url, retrying=False):
-        """
-        Fetch and return data
-        """
-        try:
-            response = await self.req.get(url, headers=self.headers)
-            if response.status_code == 429:
-                raise GarminConnectTooManyRequestsError("Too many requests")
-            logger.debug(f"fetch_data got response code {response.status_code}")
-            response.raise_for_status()
-            return response.json()
-        except Exception as err:
-            if retrying:
-                logger.debug(
-                    "Exception occurred during data retrieval, relogin without effect: %s"
-                    % err
-                )
-                raise GarminConnectConnectionError("Error connecting") from err
-            else:
-                logger.debug(
-                    "Exception occurred during data retrieval - perhaps session expired - trying relogin: %s"
-                    % err
-                )
-                self.login()
-                await self.fetch_data(url, retrying=True)
 
     async def get_activities(self, start, limit):
         """
@@ -152,7 +127,7 @@ class Garmin:
 
         if self.is_only_running:
             params.update({"activityType": "running"})
-        return await self.garth.connectapi(url, params=params)
+        return self.garth.connectapi(url, params=params)
 
     async def download_activity(self, activity_id, file_type="gpx"):
         activity_id = str(activity_id)
