@@ -5,53 +5,44 @@ Copy most code from https://github.com/cyberjunky/python-garminconnect
 
 import argparse
 import asyncio
-import json
 import logging
 import os
-import re
 import sys
 import time
 import traceback
 import zipfile
-
-import garth
+from io import BytesIO
 
 import aiofiles
 import cloudscraper
+import garth
 import httpx
-from config import JSON_FILE, SQL_FILE, FOLDER_DICT, config
-from io import BytesIO
+from config import FOLDER_DICT, JSON_FILE, SQL_FILE, config
 from tenacity import retry, stop_after_attempt, wait_fixed
 
-from utils import make_activities_file_only
 from garmin_device_adaptor import wrap_device_info
+from utils import make_activities_file_only
 
 # logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 TIME_OUT = httpx.Timeout(240.0, connect=360.0)
 GARMIN_COM_URL_DICT = {
-    "BASE_URL": "https://connect.garmin.com",
     "SSO_URL_ORIGIN": "https://sso.garmin.com",
     "SSO_URL": "https://sso.garmin.com/sso",
-    # "MODERN_URL": "https://connect.garmin.com/modern",
-    "MODERN_URL": "https://connect.garmin.com",
+    "MODERN_URL": "https://connectapi.garmin.com",
     "SIGNIN_URL": "https://sso.garmin.com/sso/signin",
-    "CSS_URL": "https://static.garmincdn.com/com.garmin.connect/ui/css/gauth-custom-v1.2-min.css",
-    "UPLOAD_URL": "https://connect.garmin.com/modern/proxy/upload-service/upload/.gpx",
-    "ACTIVITY_URL": "https://connect.garmin.com/proxy/activity-service/activity/{activity_id}",
+    "UPLOAD_URL": "https://connectapi.garmin.com/upload-service/upload/",
+    "ACTIVITY_URL": "https://connectapi.garmin.com/activity-service/activity/{activity_id}",
 }
 
 GARMIN_CN_URL_DICT = {
-    "BASE_URL": "https://connect.garmin.cn",
     "SSO_URL_ORIGIN": "https://sso.garmin.com",
     "SSO_URL": "https://sso.garmin.cn/sso",
-    # "MODERN_URL": "https://connect.garmin.cn/modern",
-    "MODERN_URL": "https://connect.garmin.cn",
+    "MODERN_URL": "https://connectapi.garmin.cn",
     "SIGNIN_URL": "https://sso.garmin.cn/sso/signin",
-    "CSS_URL": "https://static.garmincdn.cn/cn.garmin.connect/ui/css/gauth-custom-v1.2-min.css",
-    "UPLOAD_URL": "https://connect.garmin.cn/modern/proxy/upload-service/upload/.gpx",
-    "ACTIVITY_URL": "https://connect.garmin.cn/proxy/activity-service/activity/{activity_id}",
+    "UPLOAD_URL": "https://connectapi.garmin.cn/upload-service/upload/",
+    "ACTIVITY_URL": "https://connectapi.garmin.cn/activity-service/activity/{activity_id}",
 }
 
 # set to True if you want to sync all time activities
@@ -163,9 +154,11 @@ class Garmin:
                     f"Could not upload {file}"
                 )
 
-    async def upload_activities_original(self, datas, use_fake_garmin_device=False):
+    async def upload_activities_original_from_strava(
+        self, datas, use_fake_garmin_device=False
+    ):
         print(
-            "start upload activities to garmin!!!, use_fake_garmin_device:",
+            "start upload activities to garmin!, use_fake_garmin_device:",
             use_fake_garmin_device,
         )
         if not self.is_login:
@@ -181,11 +174,11 @@ class Garmin:
                 file_body = wrap_device_info(f)
             else:
                 file_body = BytesIO(f.read())
-            files = {"data": (data.filename, file_body)}
+            files = {"file": (data.filename, file_body)}
 
             try:
                 res = await self.req.post(
-                    self.upload_url, files=files, headers={"nk": "NT"}
+                    self.upload_url, files=files, headers=self.headers
                 )
                 os.remove(data.filename)
                 f.close()

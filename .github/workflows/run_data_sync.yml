@@ -1,18 +1,19 @@
 name: Run Data Sync
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
   schedule:
     - cron: '0 0 * * 1'
   push:
     branches:
-      - ben1204
+      - test
     paths:
       - run_page/nike_sync.py
       - run_page/nike_to_strava_sync.py
       - run_page/strava_sync.py
       - run_page/gen_svg.py
       - run_page/garmin_sync.py
+      - run_page/garmin_sync_global_cn.py
       - run_page/keep_sync.py
       - run_page/gpx_sync.py
       - run_page/tcx_sync.py
@@ -114,8 +115,8 @@ jobs:
         if: env.RUN_TYPE == 'garmin'
         run: |
           # python run_page/get_garmin_secret.py ${{secrets.GARMIN_EMAIL}} ${{secrets.GARMIN_PASSWORD}}
-          # python run_page/garmin_sync.py ${{secrets.GARMIN_SECRET_STRING }}
-          python run_page/garmin_sync_garth.py ${{ secrets.GARMIN_EMAIL }} ${{ secrets.GARMIN_PASSWORD }}
+          python run_page/garmin_sync.py ${{secrets.GARMIN_SECRET_STRING }}
+          python run_page/garmin_sync_global_cn.py ${{ secrets.GARMIN_SECRET_STRING_CN }} ${{ secrets.GARMIN_SECRET_STRING }}
         # If you only want to sync `type running` add args --only-run, default script is to sync all data (rides and runs).
         # python run_page/garmin_sync.py ${{ secrets.GARMIN_SECRET_STRING }} --only-run
 
@@ -126,6 +127,15 @@ jobs:
           python run_page/garmin_sync_garth.py $${{ secrets.GARMIN_EMAIL }} ${{ secrets.GARMIN_PASSWORD }} --is-cn
         # If you only want to sync `type running` add args --only-run, default script is to sync all data (rides and runs).
         # python run_page/garmin_sync.py ${{ secrets.GARMIN_SECRET_STRING_CN }}  --only-run --is-cn
+
+      - name: Run sync Garmin CN to Garmin script
+        if: env.RUN_TYPE == 'garmin_sync_cn_global'
+        run: |
+          # make garimin secret string `python run_page/garmin_sync_cn_global.py ${email} ${password} --is-cn
+          python run_page/garmin_sync_cn_global.py ${{ secrets.GARMIN_SECRET_STRING_CN }} ${{ secrets.GARMIN_SECRET_STRING }}
+        # If you only want to sync `type running` add args --only-run, default script is to sync all data (rides and runs).
+        # python run_page/garmin_sync_cn_global.py ${{ secrets.GARMIN_SECRET_STRING_CN }} ${{ secrets.GARMIN_SECRET_STRING }}  --only-run
+
 
       - name: Run sync Only GPX script
         if: env.RUN_TYPE == 'only_gpx'

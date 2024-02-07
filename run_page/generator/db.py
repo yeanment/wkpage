@@ -7,7 +7,8 @@ import geopy
 from config import TYPE_DICT
 from geopy.geocoders import Nominatim
 from sqlalchemy import Column, Float, Integer, Interval, String, create_engine
-from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 Base = declarative_base()
@@ -90,13 +91,18 @@ def update_or_create_activity(session, run_activity):
             if not location_country and start_point or location_country == "China":
                 try:
                     location_country = str(
-                        g.reverse(f"{start_point.lat}, {start_point.lon}")
+                        g.reverse(
+                            f"{start_point.lat}, {start_point.lon}", language="zh-CN"
+                        )
                     )
                 # limit (only for the first time)
                 except Exception as e:
                     try:
                         location_country = str(
-                            g.reverse(f"{start_point.lat}, {start_point.lon}")
+                            g.reverse(
+                                f"{start_point.lat}, {start_point.lon}",
+                                language="zh-CN",
+                            )
                         )
                     except Exception as e:
                         pass
