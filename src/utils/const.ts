@@ -2,12 +2,12 @@
 const MAPBOX_TOKEN =
     'pk.eyJ1IjoiYmVuLTI5IiwiYSI6ImNrZ3Q4Ym9mMDBqMGYyeXFvODV2dWl6YzQifQ.gSKoWF-fMjhzU67TuDezJQ';
 const MUNICIPALITY_CITIES_ARR = [
-  '北京市',
-  '上海市',
-  '天津市',
-  '重庆市',
-  '香港特别行政区',
-  '澳门特别行政区',
+  'Beijing',
+  'Shanghai',
+  'Tianjin',
+  'Chongqing',
+  'Hong Kong SAR',
+  'Macao SAR',
 ];
 const MAP_LAYER_LIST = [
   'road-label',
@@ -44,15 +44,15 @@ const LIGHTS_ON = true;
 const IS_CHINESE = true;
 const USE_ANIMATION_FOR_GRID = false;
 const CHINESE_INFO_MESSAGE = (yearLength: number, year: string): string =>
-  `户外运动 ${yearLength} 年 ` + ( year === 'Total' ? '' : `，地图展示的是 ${year} 年的轨迹`);
+  `Outdoor ${yearLength} years ` + ( year === 'Total' ? '' : `, trajectory of ${year}`);
 
 const ENGLISH_INFO_MESSAGE = (yearLength: number, year: string): string =>
   `Logged ${yearLength} Years of Outdoor Journey` +  ( year === 'Total' ? '' : `, the map show routes in ${year}`);
 
 // not support English for now
 const CHINESE_LOCATION_INFO_MESSAGE_FIRST =
-  '我去过了一些地方，希望随着时间推移，地图点亮的地方越来越多';
-const CHINESE_LOCATION_INFO_MESSAGE_SECOND = '不要停下来，不要停下探索的脚步';
+  'VENI VIDI VICI';
+const CHINESE_LOCATION_INFO_MESSAGE_SECOND = 'Never stop.';
 
 const INFO_MESSAGE = IS_CHINESE ? CHINESE_INFO_MESSAGE : ENGLISH_INFO_MESSAGE;
 const FULL_MARATHON_RUN_TITLE = IS_CHINESE ? '全程马拉松' : 'Full Marathon';

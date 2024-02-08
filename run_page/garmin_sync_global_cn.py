@@ -65,7 +65,8 @@ if __name__ == "__main__":
     )
     b64_string_cn = secret_string_cn + "=" * ((4 - len(secret_string_cn) % 4) % 4)
 
-    print(base64.b64decode(b64_string_global))
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     loop = asyncio.get_event_loop()
     future = asyncio.ensure_future(
         download_new_activities(
@@ -73,12 +74,25 @@ if __name__ == "__main__":
             auth_domain,
             synced_activity,
             is_only_running,
-            folder,
+            FIT_FOLDER,
             "fit",
         )
     )
     loop.run_until_complete(future)
     new_ids = future.result()
+
+    loop = asyncio.get_event_loop()
+    future = asyncio.ensure_future(
+        download_new_activities(
+            b64_string_global,
+            auth_domain,
+            synced_activity,
+            is_only_running,
+            GPX_FOLDER,
+            "gpx",
+        )
+    )
+    loop.run_until_complete(future)
 
     to_upload_files = []
     for i in new_ids:
@@ -106,4 +120,4 @@ if __name__ == "__main__":
     # Step 2:
     # Generate track from fit/gpx file
     make_activities_file(SQL_FILE, GPX_FOLDER, JSON_FILE, file_suffix="gpx")
-    make_activities_file(SQL_FILE, FIT_FOLDER, JSON_FILE, file_suffix="fit")
+    # make_activities_file(SQL_FILE, FIT_FOLDER, JSON_FILE, file_suffix="fit")

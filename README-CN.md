@@ -1,22 +1,12 @@
 ## note1: use v2.0 need change vercel setting from Gatsby to Vite
 
-## note2: 2023.09.26 garmin need secret_string(and in Actions) get `python run_page/garmin_sync.py ${secret_string}` if cn `python run_page/garmin_sync.py ${secret_string} --is-cn`
-
 # [打造个人户外运动主页](http://workouts.ben29.xyz)
 
 ![screenshot](https://user-images.githubusercontent.com/6956444/163125711-24d0ad99-490d-4c04-b89f-5b7fe776eb38.png)
 
 简体中文 | [English](README.md)
 
-本项目基于 [running_page](https://github.com/yihong0618/running_page/blob/master/README-CN.md) , 添加了支持多种运动类型。部署可参考原项目操作步骤
-
-## 新增特性
-
-1. 支持多种运动类型，如骑行、徒步、游泳
-1. 支持 APP 数据获取
-   - **[咕咚](#codoon咕咚)** (因咕咚限制单个设备原因，无法自动化)
-   - **[行者](#行者)**
-1. 支持 [自驾(Google 路书)](#自驾google路书) , 把自驾路线也展示在地图上
+本项目基于 [workouts_page](https://github.com/ben-29/workouts_page) , 添加了支持多种运动类型。部署可参考原项目操作步骤
 
 ## 一些个性化选项
 
@@ -146,4 +136,4 @@ python3(python) scripts\kml2polyline.py
 
 # 致谢
 
-- @[yihong0618](https://github.com/yihong0618) 特别棒的项目 [running_page](https://github.com/yihong0618/running_page) 非常感谢
+- @[yihong0618](https://github.com/yihong0618), @[ben-29](https://github.com/ben-29)

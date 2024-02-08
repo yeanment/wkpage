@@ -57,12 +57,13 @@ if __name__ == "__main__":
     # If the activity is manually imported with a GPX, the GPX file will be synced
 
     # load synced activity list
-    synced_activity = load_synced_activity_list()
+    # synced_activity = load_synced_activity_list()
+    synced_activity = []
 
-    folder = FIT_FOLDER
-    # make gpx or tcx dir
-    if not os.path.exists(folder):
-        os.mkdir(folder)
+    # folder = FIT_FOLDER
+    # # make gpx or tcx dir
+    # if not os.path.exists(folder):
+    #     os.mkdir(folder)
 
     b64_string_global = secret_string_global + "=" * (
         (4 - len(secret_string_global) % 4) % 4
@@ -72,33 +73,35 @@ if __name__ == "__main__":
     client_global = Garmin(b64_string_global, auth_domain, is_only_running)
     client_cn = Garmin(b64_string_cn, "CN", is_only_running)
 
-    loop = asyncio.get_event_loop()
-    future = asyncio.ensure_future(get_activity_id_list(client_global))
-    loop.run_until_complete(future)
-    global_ids = future.result()
-
-    loop = asyncio.get_event_loop()
-    future = asyncio.ensure_future(get_activity_id_list(client_cn))
-    loop.run_until_complete(future)
-    cn_ids = future.result()
-
-    to_sync_ids = list(set(global_ids) - set(cn_ids))
-    print(f"{len(to_sync_ids)} new activities to be synced.")
-
-    # # Download activities
+    # loop = asyncio.new_event_loop()
+    # asyncio.set_event_loop(loop)
     # loop = asyncio.get_event_loop()
-    # future = asyncio.ensure_future(
-    #     download_new_activities(
-    #         b64_string_global,
-    #         auth_domain,
-    #         synced_activity,
-    #         is_only_running,
-    #         folder,
-    #         "fit",
-    #     )
-    # )
+    # future = asyncio.ensure_future(get_activity_id_list(client_global))
     # loop.run_until_complete(future)
-    # new_ids = future.result()
+    # global_ids = future.result()
+
+    # loop = asyncio.get_event_loop()
+    # future = asyncio.ensure_future(get_activity_id_list(client_cn))
+    # loop.run_until_complete(future)
+    # cn_ids = future.result()
+
+    # to_sync_ids = list(set(global_ids) - set(cn_ids))
+    # print(f"{len(to_sync_ids)} new activities to be synced.")
+
+    # Download activities
+    loop = asyncio.get_event_loop()
+    future = asyncio.ensure_future(
+        download_new_activities(
+            b64_string_global,
+            auth_domain,
+            synced_activity,
+            is_only_running,
+            GPX_FOLDER,
+            "gpx",
+        )
+    )
+    loop.run_until_complete(future)
+    new_ids = future.result()
 
     # to_upload_files = []
     # for i in to_sync_ids:
@@ -128,4 +131,4 @@ if __name__ == "__main__":
     # # Step 2:
     # # Generate track from fit/gpx file
     # make_activities_file(SQL_FILE, GPX_FOLDER, JSON_FILE, file_suffix="gpx")
-    # make_activities_file(SQL_FILE, FIT_FOLDER, JSON_FILE, file_suffix="fit")
+    make_activities_file(SQL_FILE, FIT_FOLDER, JSON_FILE, file_suffix="fit")
