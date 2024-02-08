@@ -20,7 +20,11 @@ import httpx
 from config import FIT_FOLDER, GPX_FOLDER, JSON_FILE, SQL_FILE, config
 from garmin_device_adaptor import wrap_device_info
 from garmin_sync import Garmin, get_downloaded_ids
-from garmin_sync import download_new_activities, get_activity_id_list, gather_with_concurrency
+from garmin_sync import (
+    download_new_activities,
+    get_activity_id_list,
+    gather_with_concurrency,
+)
 from synced_data_file_logger import load_synced_activity_list, save_synced_activity_list
 from utils import make_activities_file
 
@@ -60,8 +64,9 @@ if __name__ == "__main__":
     if not os.path.exists(folder):
         os.mkdir(folder)
 
-    
-    b64_string_global = secret_string_global + "=" * ((4 - len(secret_string_global) % 4) % 4)
+    b64_string_global = secret_string_global + "=" * (
+        (4 - len(secret_string_global) % 4) % 4
+    )
     b64_string_cn = secret_string_cn + "=" * ((4 - len(secret_string_cn) % 4) % 4)
 
     client_global = Garmin(b64_string_global, auth_domain, is_only_running)
@@ -77,9 +82,8 @@ if __name__ == "__main__":
     loop.run_until_complete(future)
     cn_ids = future.result()
 
-    to_sync_ids =  list(set(global_ids) - set(cn_ids))
+    to_sync_ids = list(set(global_ids) - set(cn_ids))
     print(f"{len(to_sync_ids)} new activities to be synced.")
-    
 
     # # Download activities
     # loop = asyncio.get_event_loop()
@@ -95,7 +99,7 @@ if __name__ == "__main__":
     # )
     # loop.run_until_complete(future)
     # new_ids = future.result()
-    
+
     # to_upload_files = []
     # for i in to_sync_ids:
     #     if os.path.exists(os.path.join(FIT_FOLDER, f"{i}.fit")):

@@ -77,12 +77,11 @@ class Garmin:
         self.is_login = False
 
         self.garth = garth.Client(
-            domain="garmin.cn" 
-            if auth_domain and str(auth_domain).upper() == "CN" 
+            domain="garmin.cn"
+            if auth_domain and str(auth_domain).upper() == "CN"
             else "garmin.com"
         )
         self.token = None
-
 
     @retry(stop=stop_after_attempt(5), wait=wait_fixed(30))
     def login(self):
@@ -97,7 +96,7 @@ class Garmin:
             except Exception as err:
                 self.is_login = False
                 raise GarminConnectConnectionError("Error connecting") from err
-        
+
         if self.is_login is False:
             try:
                 self.garth.login(options.email, options.password)
@@ -106,14 +105,13 @@ class Garmin:
             except Exception as err:
                 self.is_login = False
 
-
     async def get_activities(self, start, limit):
         """
         Fetch available activities
         """
         if not self.is_login:
             self.login()
-        url = ( "/activitylist-service/activities/search/activities")
+        url = "/activitylist-service/activities/search/activities"
         params = {"start": str(start), "limit": str(limit)}
 
         if self.is_only_running:
@@ -122,7 +120,7 @@ class Garmin:
 
     async def download_activity(self, activity_id, file_type="gpx"):
         activity_id = str(activity_id)
-        
+
         url = None
         if file_type in ["gpx", "tcx", "kml", "csv"]:
             url = f"/download-service/export/{file_type}/activity/{activity_id}"
@@ -139,9 +137,13 @@ class Garmin:
         for file, garmin_type in files:
             file_base_name = os.path.basename(file)
             file_extension = file_base_name.split(".")[-1]
-            allowed_file_extension = (
-                file_extension.lower() in ["gpx", "tcx", "kml", "csv", "fit"]
-            )
+            allowed_file_extension = file_extension.lower() in [
+                "gpx",
+                "tcx",
+                "kml",
+                "csv",
+                "fit",
+            ]
 
             if allowed_file_extension:
                 filedata = {
@@ -150,9 +152,7 @@ class Garmin:
                 url = "/upload-service/upload"
                 return self.garth.post("connectapi", url, files=filedata, api=True)
             else:
-                raise GarminConnectInvalidFileFormatError(
-                    f"Could not upload {file}"
-                )
+                raise GarminConnectInvalidFileFormatError(f"Could not upload {file}")
 
     async def upload_activities_original_from_strava(
         self, datas, use_fake_garmin_device=False

@@ -60,8 +60,9 @@ if __name__ == "__main__":
     if not os.path.exists(folder):
         os.mkdir(folder)
 
-    
-    b64_string_global = secret_string_global + "=" * ((4 - len(secret_string_global) % 4) % 4)
+    b64_string_global = secret_string_global + "=" * (
+        (4 - len(secret_string_global) % 4) % 4
+    )
     b64_string_cn = secret_string_cn + "=" * ((4 - len(secret_string_cn) % 4) % 4)
 
     print(base64.b64decode(b64_string_global))
@@ -90,9 +91,7 @@ if __name__ == "__main__":
 
     print("Files to sync:" + " ".join(to_upload_files))
     garmin_cn_client = Garmin(
-        b64_string_cn,
-        auth_domain='CN',
-        is_only_running=is_only_running
+        b64_string_cn, auth_domain="CN", is_only_running=is_only_running
     )
     loop = asyncio.get_event_loop()
     future = asyncio.ensure_future(
