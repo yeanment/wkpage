@@ -65,6 +65,14 @@ def make_activities_file_only(sql_file, data_dir, json_file, file_suffix="gpx"):
         json.dump(activities_list, f, indent=0)
 
 
+def make_activities_file_only_fromfitgpx(sql_file, gpx_dir, fit_dir, json_file):
+    generator = Generator(sql_file)
+    generator.sync_from_gpxfit_dir(gpx_dir, fit_dir)
+    activities_list = generator.loadForMapping()
+    with open(json_file, "w") as f:
+        json.dump(activities_list, f, indent=0)
+
+
 # def make_strava_client(client_id, client_secret, refresh_token):
 #     client = Client()
 

@@ -22,7 +22,7 @@ from garmin_device_adaptor import wrap_device_info
 from garmin_sync import Garmin, get_downloaded_ids
 from garmin_sync import download_new_activities, gather_with_concurrency
 from synced_data_file_logger import load_synced_activity_list, save_synced_activity_list
-from utils import make_activities_file
+from utils import make_activities_file, make_activities_file_only_fromfitgpx
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -119,5 +119,6 @@ if __name__ == "__main__":
 
     # Step 2:
     # Generate track from fit/gpx file
-    make_activities_file(SQL_FILE, GPX_FOLDER, JSON_FILE, file_suffix="gpx")
+    # make_activities_file(SQL_FILE, GPX_FOLDER, JSON_FILE, file_suffix="gpx")
     # make_activities_file(SQL_FILE, FIT_FOLDER, JSON_FILE, file_suffix="fit")
+    make_activities_file_only_fromfitgpx(SQL_FILE, GPX_FOLDER, FIT_FOLDER, JSON_FILE)

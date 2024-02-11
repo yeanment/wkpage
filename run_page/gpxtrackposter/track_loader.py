@@ -45,6 +45,18 @@ def load_fit_file(file_name):
     return t
 
 
+def load_gpxfit_file(file_name_gpx, file_name_fit):
+    """Load an individual FIT file as a track by using Track.load_fit()"""
+    tgpx = Track()
+    tgpx.load_gpx(file_name_gpx)
+
+    tfit = Track()
+    tfit.load_fit(file_name_fit)
+
+    tfit.name = tgpx.name
+    return tfit
+
+
 class TrackLoader:
     """
     Attributes:
@@ -77,6 +89,51 @@ class TrackLoader:
             file_names, self.load_func_dict.get(file_suffix, load_gpx_file)
         )
 
+        tracks.extend(loaded_tracks.values())
+        log.info(f"Conventionally loaded tracks: {len(loaded_tracks)}")
+
+        tracks = self._filter_tracks(tracks)
+
+        # merge tracks that took place within one hour
+        tracks = self._merge_tracks(tracks)
+        # filter out tracks with length < min_length
+        return [t for t in tracks if t.length >= self.min_length]
+
+    def load_tracks_gpxfit(self, gpx_dir, fit_dir):
+        """Load tracks data_dir and return as a List of tracks"""
+        gpx_file_names = [x for x in self._list_data_files(gpx_dir, "gpx")]
+        fit_file_names = [x for x in self._list_data_files(fit_dir, "fit")]
+        gpx_ids = [os.path.splitext(os.path.basename(x))[0] for x in gpx_file_names]
+        fit_ids = [os.path.splitext(os.path.basename(x))[0] for x in fit_file_names]
+        print(f"GPX files: {len(gpx_file_names)}")
+        print(f"FIT files: {len(fit_file_names)}")
+        fitgpxid = set.intersection(set(fit_ids), set(gpx_ids))
+        fituniqid = set(fit_ids) - fitgpxid
+        gpxuniqid = set(gpx_ids) - fitgpxid
+
+        gpxuniqfiles = [os.path.join(gpx_dir, x + ".gpx") for x in gpxuniqid]
+        fituniqfiles = [os.path.join(fit_dir, x + ".fit") for x in fituniqid]
+
+        fitgpx_fitfile = [os.path.join(fit_dir, x + ".fit") for x in fitgpxid]
+        fitgpx_gpxfile = [os.path.join(gpx_dir, x + ".gpx") for x in fitgpxid]
+        print(f"FIT files (with gpt): {len(fitgpxid)}")
+        print(f"Uniquq fit/gpx files: {len(fituniqid)}/{len(gpxuniqid)}")
+
+        tracks = []
+        loaded_tracks = self._load_data_tracks(
+            gpxuniqfiles, self.load_func_dict.get("gpx", load_gpx_file)
+        )
+        tracks.extend(loaded_tracks.values())
+        loaded_tracks = self._load_data_tracks(
+            fituniqfiles, self.load_func_dict.get("fit", load_fit_file)
+        )
+        tracks.extend(loaded_tracks.values())
+        log.info(f"Conventionally loaded tracks: {len(loaded_tracks)}")
+
+        # Load foxfit
+        loaded_tracks = self._load_gpxfit_tracks(
+            fitgpx_gpxfile, fitgpx_fitfile, load_gpxfit_file
+        )
         tracks.extend(loaded_tracks.values())
         log.info(f"Conventionally loaded tracks: {len(loaded_tracks)}")
 
@@ -166,6 +223,29 @@ class TrackLoader:
             future_to_file_name = {
                 executor.submit(load_func, file_name): file_name
                 for file_name in file_names
+            }
+        for future in concurrent.futures.as_completed(future_to_file_name):
+            file_name = future_to_file_name[future]
+            try:
+                t = future.result()
+            except TrackLoadError as e:
+                log.error(f"Error while loading {file_name}: {e}")
+            else:
+                tracks[file_name] = t
+        return tracks
+
+    @staticmethod
+    def _load_gpxfit_tracks(gpxfiles, fitfiles, load_func=load_gpxfit_file):
+        """
+        TODO refactor with _load_tcx_tracks
+        """
+        tracks = {}
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            future_to_file_name = {
+                executor.submit(load_func, gpxfiles[ifile], fitfiles[ifile]): fitfiles[
+                    ifile
+                ]
+                for ifile in range(len(gpxfiles))
             }
         for future in concurrent.futures.as_completed(future_to_file_name):
             file_name = future_to_file_name[future]

@@ -1,5 +1,6 @@
 # Fit related
 FIT_OUT/*.fit
+GPX_OUT/*.gpx
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

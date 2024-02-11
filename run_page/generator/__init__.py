@@ -98,6 +98,29 @@ class Generator:
 
         self.session.commit()
 
+    def sync_from_gpxfit_dir(self, gpx_dir, fit_dir):
+        loader = track_loader.TrackLoader()
+        tracks = loader.load_tracks_gpxfit(gpx_dir, fit_dir)
+        print(f"load {len(tracks)} tracks")
+        if not tracks:
+            print("No tracks found.")
+            return
+
+        synced_files = []
+
+        for t in tracks:
+            created = update_or_create_activity(self.session, t.to_namedtuple())
+            if created:
+                sys.stdout.write("+")
+            else:
+                sys.stdout.write(".")
+            synced_files.extend(t.file_names)
+            sys.stdout.flush()
+
+        save_synced_data_file_list(synced_files)
+
+        self.session.commit()
+
     def sync_from_kml_track(self, track):
         created = update_or_create_activity(self.session, track.to_namedtuple())
         if created:
