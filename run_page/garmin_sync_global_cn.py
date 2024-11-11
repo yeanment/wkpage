@@ -12,7 +12,7 @@ import time
 import traceback
 import zipfile
 from io import BytesIO
-import base64
+
 import aiofiles
 import cloudscraper
 import garth
@@ -31,7 +31,7 @@ from synced_data_file_logger import (
     load_fit_name_mapping,
     save_fit_name_mapping,
 )
-from utils import make_activities_file, make_activities_file_only_fromfitgpx
+from utils import make_activities_file
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -74,8 +74,6 @@ if __name__ == "__main__":
     )
     b64_string_cn = secret_string_cn + "=" * ((4 - len(secret_string_cn) % 4) % 4)
 
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
     loop = asyncio.get_event_loop()
     future = asyncio.ensure_future(
         download_new_activities(
@@ -83,7 +81,7 @@ if __name__ == "__main__":
             auth_domain,
             synced_activity,
             is_only_running,
-            FIT_FOLDER,
+            folder,
             "fit",
         )
     )
