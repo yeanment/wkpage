@@ -6,10 +6,17 @@ import time
 import geopy
 from config import TYPE_DICT
 from geopy.geocoders import Nominatim
-from sqlalchemy import Column, Float, Integer, Interval, String, create_engine
-
-# from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import declarative_base
+from sqlalchemy import (
+    Column,
+    Float,
+    Integer,
+    Interval,
+    String,
+    create_engine,
+    inspect,
+    text,
+)
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 Base = declarative_base()
@@ -91,24 +98,24 @@ def update_or_create_activity(session, run_activity):
             start_point = run_activity.start_latlng
             location_country = getattr(run_activity, "location_country", "")
             # or China for #176 to fix
-            if not location_country and start_point or location_country == "China":
-                try:
-                    location_country = str(
-                        g.reverse(
-                            f"{start_point.lat}, {start_point.lon}", language="zh-CN"
-                        )
-                    )
-                # limit (only for the first time)
-                except Exception as e:
-                    try:
-                        location_country = str(
-                            g.reverse(
-                                f"{start_point.lat}, {start_point.lon}",
-                                language="zh-CN",
-                            )
-                        )
-                    except Exception as e:
-                        pass
+            # if not location_country and start_point or location_country == "China":
+            #     try:
+            #         location_country = str(
+            #             g.reverse(
+            #                 f"{start_point.lat}, {start_point.lon}", language="zh-CN"
+            #             )
+            #         )
+            #     # limit (only for the first time)
+            #     except Exception as e:
+            #         try:
+            #             location_country = str(
+            #                 g.reverse(
+            #                     f"{start_point.lat}, {start_point.lon}",
+            #                     language="zh-CN",
+            #                 )
+            #             )
+            #         except Exception as e:
+            #             pass
 
             activity = Activity(
                 run_id=run_activity.id,
@@ -150,10 +157,37 @@ def update_or_create_activity(session, run_activity):
     return created
 
 
+def add_missing_columns(engine, model):
+    inspector = inspect(engine)
+    table_name = model.__tablename__
+    columns = {col["name"] for col in inspector.get_columns(table_name)}
+    missing_columns = []
+
+    for column in model.__table__.columns:
+        if column.name not in columns:
+            missing_columns.append(column)
+    if missing_columns:
+        with engine.connect() as conn:
+            for column in missing_columns:
+                column_type = str(column.type)
+                conn.execute(
+                    text(
+                        f"ALTER TABLE {table_name} ADD COLUMN {column.name} {column_type}"
+                    )
+                )
+
+
 def init_db(db_path):
     engine = create_engine(
         f"sqlite:///{db_path}", connect_args={"check_same_thread": False}
     )
     Base.metadata.create_all(engine)
-    session = sessionmaker(bind=engine)
-    return session()
+
+    # check missing columns
+    add_missing_columns(engine, Activity)
+
+    sm = sessionmaker(bind=engine)
+    session = sm()
+    # apply the changes
+    session.commit()
+    return session
