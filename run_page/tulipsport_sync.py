@@ -1,22 +1,16 @@
 import argparse
-import base64
-import hashlib
 import json
 import os
-import time
-import zlib
-import math
 from collections import namedtuple
 from datetime import datetime, timedelta, timezone
 from urllib.parse import quote
 import gpxpy
 import polyline
 import requests
-import eviltransform
 from config import GPX_FOLDER, JSON_FILE, SQL_FILE, run_map, start_point
 from generator import Generator
 from xml.etree import ElementTree
-from utils import adjust_time, adjust_time_to_utc
+from utils import adjust_time_to_utc
 
 # need to test
 ACTIVITY_LIST_API = "https://open.tulipsport.com/api/v1/feeds4likes?start_time={start_time}&end_time={end_time}"
@@ -76,7 +70,6 @@ def get_all_activity_summaries(session, headers, start_time=None):
                         "outdoor": summary["location"] != ",,",
                     }
                 )
-            summary_list_length = len(summary_list)
     return result
 
 
@@ -252,8 +245,8 @@ def save_activity_gpx(summary, detail, track):
         file_path = os.path.join(GPX_FOLDER, str(activity_id) + ".gpx")
         with open(file_path, "w") as fb:
             fb.write(gpx.to_xml())
-    except:
-        print(f"saving tulipsort activity {activity_id} gpx occurs errors")
+    except Exception as e:
+        print(f"saving tulipsport activity {activity_id} gpx occurs errors: {str(e)}")
         pass
 
 

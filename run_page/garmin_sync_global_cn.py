@@ -9,9 +9,9 @@ import os
 import sys
 
 
-from config import FIT_FOLDER, GPX_FOLDER, JSON_FILE, SQL_FILE, config
+from config import FIT_FOLDER, GPX_FOLDER, JSON_FILE, SQL_FILE
 from garmin_sync import Garmin, get_downloaded_ids
-from garmin_sync import download_new_activities, gather_with_concurrency
+from garmin_sync import download_new_activities
 from utils import make_activities_file
 
 if __name__ == "__main__":
@@ -74,7 +74,6 @@ if __name__ == "__main__":
     new_ids.sort(key=int, reverse=True)
     nbound = min(100, len(new_ids))
     to_upload_files = []
-    print(new_ids[:nbound])
     for i in new_ids[:nbound]:
         if os.path.exists(os.path.join(FIT_FOLDER, f"{i}.fit")):
             # upload fit files

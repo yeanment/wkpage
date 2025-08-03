@@ -1,7 +1,6 @@
 import datetime
 import random
 import string
-import time
 
 import geopy
 from config import TYPE_DICT
@@ -29,7 +28,7 @@ def randomword():
 
 
 geopy.geocoders.options.default_user_agent = "my-application"
-# reverse the location (lan, lon) -> location detail
+# reverse the location (lat, lon) -> location detail
 g = Nominatim(user_agent=randomword())
 
 
@@ -94,28 +93,43 @@ def update_or_create_activity(session, run_activity):
         source = run_activity.source if hasattr(run_activity, "source") else "gpx"
         if run_activity.type in TYPE_DICT:
             type = TYPE_DICT[run_activity.type]
+
+        current_elevation_gain = 0.0  # default value
+
+        # https://github.com/stravalib/stravalib/blob/main/src/stravalib/strava_model.py#L639C1-L643C41
+        if (
+            hasattr(run_activity, "total_elevation_gain")
+            and run_activity.total_elevation_gain is not None
+        ):
+            current_elevation_gain = float(run_activity.total_elevation_gain)
+        elif (
+            hasattr(run_activity, "elevation_gain")
+            and run_activity.elevation_gain is not None
+        ):
+            current_elevation_gain = float(run_activity.elevation_gain)
+
         if not activity:
             start_point = run_activity.start_latlng
             location_country = getattr(run_activity, "location_country", "")
             # or China for #176 to fix
-            # if not location_country and start_point or location_country == "China":
-            #     try:
-            #         location_country = str(
-            #             g.reverse(
-            #                 f"{start_point.lat}, {start_point.lon}", language="zh-CN"
-            #             )
-            #         )
-            #     # limit (only for the first time)
-            #     except Exception as e:
-            #         try:
-            #             location_country = str(
-            #                 g.reverse(
-            #                     f"{start_point.lat}, {start_point.lon}",
-            #                     language="zh-CN",
-            #                 )
-            #             )
-            #         except Exception as e:
-            #             pass
+            if not location_country and start_point or location_country == "China":
+                try:
+                    location_country = str(
+                        g.reverse(
+                            f"{start_point.lat}, {start_point.lon}", language="zh-CN"
+                        )
+                    )
+                # limit (only for the first time)
+                except Exception:
+                    try:
+                        location_country = str(
+                            g.reverse(
+                                f"{start_point.lat}, {start_point.lon}",
+                                language="zh-CN",
+                            )
+                        )
+                    except Exception:
+                        pass
 
             activity = Activity(
                 run_id=run_activity.id,
@@ -129,7 +143,7 @@ def update_or_create_activity(session, run_activity):
                 location_country=location_country,
                 average_heartrate=run_activity.average_heartrate,
                 average_speed=float(run_activity.average_speed),
-                elevation_gain=float(run_activity.elevation_gain),
+                elevation_gain=current_elevation_gain,
                 summary_polyline=(
                     run_activity.map and run_activity.map.summary_polyline or ""
                 ),
@@ -145,7 +159,7 @@ def update_or_create_activity(session, run_activity):
             activity.type = type
             activity.average_heartrate = run_activity.average_heartrate
             activity.average_speed = float(run_activity.average_speed)
-            activity.elevation_gain = float(run_activity.elevation_gain)
+            activity.elevation_gain = current_elevation_gain
             activity.summary_polyline = (
                 run_activity.map and run_activity.map.summary_polyline or ""
             )
