@@ -72,3 +72,5 @@ config.yaml
 
 route.png
 route.svg
+
+.env

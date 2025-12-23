@@ -5,14 +5,18 @@ Copy most code from https://github.com/cyberjunky/python-garminconnect
 
 import argparse
 import asyncio
+import logging
 import os
 import sys
 
-
-from config import FIT_FOLDER, GPX_FOLDER, JSON_FILE, SQL_FILE
+import httpx
+from config import JSON_FILE, SQL_FILE
+from config import FIT_FOLDER, GPX_FOLDER
 from garmin_sync import Garmin, get_downloaded_ids
 from garmin_sync import download_new_activities
-from utils import make_activities_file
+# from utils import make_activities_file
+from utils import make_activities_file_only
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -32,7 +36,15 @@ if __name__ == "__main__":
     options = parser.parse_args()
     secret_string_cn = options.cn_secret_string
     secret_string_global = options.global_secret_string
+    
+    secret_string_global.encode('utf-8').strip()
+    b64_string_global = secret_string_global + "=" * (
+        (4 - len(secret_string_global) % 4) % 4
+    )
+    b64_string_cn = secret_string_cn + "=" * ((4 - len(secret_string_cn) % 4) % 4)
+
     auth_domain = "COM"
+
     is_only_running = options.only_run
     if secret_string_cn is None or secret_string_global is None:
         print("Missing argument nor valid configuration file")
@@ -46,18 +58,8 @@ if __name__ == "__main__":
     downloaded_fit = get_downloaded_ids(FIT_FOLDER)
     downloaded_gpx = get_downloaded_ids(GPX_FOLDER)
     downloaded_activity = list(set(downloaded_fit + downloaded_gpx))
-
-    folder = FIT_FOLDER
-    # make gpx or tcx dir
-    if not os.path.exists(folder):
-        os.mkdir(folder)
     
-    secret_string_global.encode('utf-8').strip()
-    b64_string_global = secret_string_global + "=" * (
-        (4 - len(secret_string_global) % 4) % 4
-    )
-    b64_string_cn = secret_string_cn + "=" * ((4 - len(secret_string_cn) % 4) % 4)
-
+    folder = FIT_FOLDER
     loop = asyncio.get_event_loop()
     future = asyncio.ensure_future(
         download_new_activities(
@@ -89,12 +91,13 @@ if __name__ == "__main__":
         garmin_cn_client.upload_activities_files(to_upload_files)
     )
     loop.run_until_complete(future)
-
+    print("Garmin CN Sync Finished.")
+    
     # Step 2:
     # Generate track from fit/gpx file
-    make_activities_file(
+    make_activities_file_only(
         SQL_FILE, GPX_FOLDER, JSON_FILE, file_suffix="gpx", activity_title_dict=id2title
     )
-    make_activities_file(
+    make_activities_file_only(
         SQL_FILE, FIT_FOLDER, JSON_FILE, file_suffix="fit", activity_title_dict=id2title
     )
