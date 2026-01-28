@@ -8,6 +8,7 @@ import useHover from '@/hooks/useHover';
 import { yearStats } from '@assets/index';
 import { loadSvgComponent } from '@/utils/svgUtils';
 import { SHOW_ELEVATION_GAIN } from '@/utils/const';
+import { DIST_UNIT, M_TO_DIST, M_TO_ELEV, ELEV_UNIT } from '@/utils/utils';
 
 const YearStat = ({
   year,
@@ -63,7 +64,8 @@ const YearStat = ({
       streak = Math.max(streak, run.streak);
     }
   });
-  const sumElevationGainStr = sumElevationGain.toFixed(0);
+  sumDistance = parseFloat((sumDistance / M_TO_DIST).toFixed(0));
+  const sumElevationGainStr = (sumElevationGain * M_TO_ELEV).toFixed(0);
   const hasHeartRate = !(heartRate === 0);
   const avgHeartRate = (heartRate / (runs.length - heartRateNullCount)).toFixed(
     0
@@ -82,7 +84,7 @@ const YearStat = ({
             key="total"
             value={runs.length}
             description={' Total'}
-            distance={(sumDistance / 1000.0).toFixed(0)}
+            distance={sumDistance}
           />
         )}
         {workoutsArr.map(([type, count]) => (
@@ -102,7 +104,7 @@ const YearStat = ({
         {SHOW_ELEVATION_GAIN && sumElevationGain > 0 && (
           <Stat
             value={`${sumElevationGainStr} `}
-            description="M Elev Gain"
+            description={`${ELEV_UNIT} Elev Gain`}
             className="pb-2"
           />
         )}

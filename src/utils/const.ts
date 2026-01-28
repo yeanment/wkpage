@@ -103,6 +103,8 @@ const LOCATION_TITLE = IS_CHINESE ? 'Location' : 'Location';
 const HOME_PAGE_TITLE = IS_CHINESE ? '首页' : 'Home';
 
 const LOADING_TEXT = IS_CHINESE ? '加载中...' : 'Loading...';
+const NO_ROUTE_DATA = IS_CHINESE ? '暂无路线数据' : 'No route data';
+const INVALID_ROUTE_DATA = IS_CHINESE ? '路线数据无效' : 'Invalid route data';
 
 const RUN_TITLES = {
   FULL_MARATHON_RUN_TITLE,
@@ -184,6 +186,8 @@ export {
   TYPES_MAPPING,
   HOME_PAGE_TITLE,
   LOADING_TEXT,
+  NO_ROUTE_DATA,
+  INVALID_ROUTE_DATA,
 };
 
 const nike = 'rgb(224,237,94)'; // if you want to change the main color, modify this value in src/styles/variables.scss
