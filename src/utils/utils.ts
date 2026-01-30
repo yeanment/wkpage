@@ -306,6 +306,8 @@ const titleForType = (type: string): string => {
       return RUN_TITLES.KAYAKING_TITLE;
     case 'Snowboard':
       return RUN_TITLES.SNOWBOARD_TITLE;
+    case 'BackcountrySki':
+      return RUN_TITLES.BACKCOUNTRY_SKI_TITLE;
     case 'Ski':
       return RUN_TITLES.SKI_TITLE;
     default:
@@ -387,6 +389,7 @@ const colorFromType = (workoutType: string): string => {
       return getRuntimeSingleColor(KAYAKING_COLOR);
     case 'Snowboard':
     case 'Ski':
+    case 'BackcountrySki':
       return getRuntimeSingleColor(SNOWBOARD_COLOR);
     default:
       return getRuntimeSingleColor();

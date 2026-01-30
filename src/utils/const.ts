@@ -80,6 +80,7 @@ const ROWING_TITLE = IS_CHINESE ? '划船' : 'Rowing';
 const KAYAKING_TITLE = IS_CHINESE ? '皮划艇' : 'Kayaking';
 const SNOWBOARD_TITLE = IS_CHINESE ? '单板滑雪' : 'Snowboard';
 const SKI_TITLE = IS_CHINESE ? '双板滑雪' : 'Ski';
+const BACKCOUNTRY_SKI_TITLE = IS_CHINESE ? '野外滑雪' : 'BackcountrySki';
 const ROAD_TRIP_TITLE = IS_CHINESE ? '自驾' : 'RoadTrip';
 const FLIGHT_TITLE = IS_CHINESE ? '飞行' : 'Flight';
 const RUN_TREADMILL_TITLE = IS_CHINESE ? '跑步机' : 'Treadmill Run';
@@ -121,6 +122,7 @@ const RUN_TITLES = {
   KAYAKING_TITLE,
   SNOWBOARD_TITLE,
   SKI_TITLE,
+  BACKCOUNTRY_SKI_TITLE,
   ROAD_TRIP_TITLE,
   FLIGHT_TITLE,
   RUN_TREADMILL_TITLE,
