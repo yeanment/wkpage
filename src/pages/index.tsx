@@ -6,6 +6,7 @@ import LocationStat from '@/components/LocationStat';
 import RunMap from '@/components/RunMap';
 import RunTable from '@/components/RunTable';
 import SVGStat from '@/components/SVGStat';
+import WeeklyStat from '@/components/WeeklyStat';
 import YearsStat from '@/components/YearsStat';
 import useActivities from '@/hooks/useActivities';
 import useSiteMetadata from '@/hooks/useSiteMetadata';
@@ -467,6 +468,7 @@ const Index = () => {
           thisYear={year}
           animationTrigger={animationTrigger}
         />
+        <WeeklyStat runs={runs} />
         {year === 'Total' ? (
           <SVGStat />
         ) : (
