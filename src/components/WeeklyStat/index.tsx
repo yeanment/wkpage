@@ -95,7 +95,11 @@ const WeeklyStat = ({ runs }: WeeklyStatProps) => {
     let currentYear = 0;
     let currentMonth = 0;
 
-    return Array.from(weeksMap.values()).map((item) => {
+    const weeksList = Array.from(weeksMap.values());
+    const limitedWeeksList =
+      weeksList.length > 53 ? weeksList.slice(-53) : weeksList;
+
+    return limitedWeeksList.map((item) => {
       const d = new Date(item.timestamp);
       const month = d.getMonth() + 1;
       const year = d.getFullYear();
