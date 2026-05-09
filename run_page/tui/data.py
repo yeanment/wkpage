@@ -52,7 +52,6 @@ class Activity:
     distance: float  # metres
     moving_time: str  # "HH:MM:SS" or "X days, HH:MM:SS"
     type: str
-    subtype: Optional[str]
     start_date: str  # UTC
     start_date_local: str  # "YYYY-MM-DD HH:MM:SS"
     location_country: Optional[str]
@@ -60,6 +59,7 @@ class Activity:
     average_heartrate: Optional[float]
     elevation_gain: Optional[float]
     average_speed: float  # m/s
+    source: Optional[str]
     streak: int
 
     # ── computed properties ────────────────────────────────
@@ -120,8 +120,6 @@ class Activity:
     @property
     def moving_seconds(self) -> int:
         parts = self.moving_time.split(":")
-        if len(parts) == 3:
-            return int(parts[0]) * 3600 + int(parts[1]) * 60 + int(parts[2])
         if "days" in self.moving_time or "day" in self.moving_time:
             # "X days, HH:MM:SS"
             try:
@@ -131,6 +129,8 @@ class Activity:
                 return days * 86400 + h * 3600 + m * 60 + s
             except (ValueError, IndexError):
                 pass
+        if len(parts) == 3:
+            return int(parts[0]) * 3600 + int(parts[1]) * 60 + int(parts[2])
         return 0
 
     @property

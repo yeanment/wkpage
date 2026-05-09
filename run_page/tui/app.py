@@ -34,13 +34,27 @@ from .data import (
 # ── colour palette ─────────────────────────────────────────
 
 # Keep the TUI aligned with the web dark theme in src/styles/index.css.
+YELLOW = "#E0ED5E"
+GREEN = "#00ED5E"
+PINK = "#ED55DB"
+CYAN = "#70F3FF"
+IKB = "#002FA7"
+DARK_VANILLA = "#E4D4DC"
+GOLD = "#F2BE45"
+PURPLE = "#9A76FC"
+VERY_PERI = "#7F22FE"
+# 长春花蓝
+RED = "#FF0000"
+# 大红色
+
 BG_COLOR = "#171717"  # neutral-900 / --color-bg
 SURFACE_COLOR = "#262626"  # neutral-800 / --color-run-row-hover-background
 CARD_BORDER_COLOR = "#404040"  # neutral-700 / --color-activity-card
 TEXT_COLOR = "#d4d4d8"  # zinc-300 / --color-run-table-thead
 MUTED_TEXT_COLOR = "#d4d4d4"  # neutral-300 / --color-run-date
-PRIMARY_COLOR = "#e0ed5e"  # --color-brand
-SECONDARY_COLOR = "#ccd94a"  # --color-secondary
+PRIMARY_COLOR = GREEN  # --color-brand
+# SECONDARY_COLOR = "#ccd94a"  # --color-secondary
+SECONDARY_COLOR = GREEN  # --color-secondary
 ACTIVE_CELL_COLOR = "#4dd2ff"  # --svg-color-active-cell
 SPECIAL_COLOR = "#f7d02c"  # --svg-special-color
 SPECIAL_COLOR_2 = "#f56c6c"  # --svg-special-color2
@@ -48,12 +62,22 @@ SINGLE_RUN_COLOR = "#ff4d4f"  # SINGLE_RUN_COLOR_DARK
 FOCUS_SURFACE_COLOR = "#3a3a22"
 
 TYPE_COLORS = {
-    "Run": PRIMARY_COLOR,
-    "Ride": SECONDARY_COLOR,
-    "Hike": SPECIAL_COLOR,
-    "Walk": TEXT_COLOR,
-    "Swim": SPECIAL_COLOR_2,
-    "Workout": MUTED_TEXT_COLOR,
+    "Run": YELLOW,
+    "Ride": GREEN,
+    "Hike": PINK,
+    "Walk": PINK,
+    "Workout": GREEN,
+    "Trail Run": IKB,
+    "Indoor Ride": GREEN,
+    "VirtualRide": VERY_PERI,
+    "Rowing": CYAN,
+    "Swim": GOLD,
+    "RoadTrip": PURPLE,
+    "Flight": DARK_VANILLA,
+    "Kayaking": RED,
+    "Snowboard": DARK_VANILLA,
+    "Ski": DARK_VANILLA,
+    "BackcountrySki": DARK_VANILLA,
 }
 
 INDOOR_COLOR = MUTED_TEXT_COLOR
@@ -61,10 +85,10 @@ TRAIL_COLOR = SPECIAL_COLOR
 
 
 def _type_color(activity: Activity) -> str:
-    if activity.subtype in ("indoor", "treadmill", "virtualrun"):
-        return INDOOR_COLOR
-    if activity.subtype == "trail":
-        return TRAIL_COLOR
+    # if activity.subtype in ("indoor", "treadmill", "virtualrun"):
+    #     return INDOOR_COLOR
+    # if activity.subtype == "trail":
+    #     return TRAIL_COLOR
     return TYPE_COLORS.get(activity.sport_type_normalized, PRIMARY_COLOR)
 
 
@@ -451,7 +475,7 @@ class FilterBar(Widget):
 
     def compose(self) -> ComposeResult:
         with Horizontal(id="filter-row"):
-            yield Label("running_page", id="fl-brand")
+            yield Label("workouts_page", id="fl-brand")
             yield Label("0 activities", id="fl-summary")
             yield Button(self._format_year_label(), id="fl-year", classes="filter-chip")
             yield Button(self._format_type_label(), id="fl-type", classes="filter-chip")
@@ -793,18 +817,18 @@ class RunningTUI(App):
     }
     #nav-sidebar > Button:hover {
         background: #262626;
-        border-left: thick #ccd94a;
+        border-left: thick #00ED5E;
     }
     #nav-sidebar > Button:focus {
         background: #3a3a22;
-        color: #e0ed5e;
-        border-left: thick #e0ed5e;
+        color: #00ED5E;
+        border-left: thick #00ED5E;
     }
     #nav-sidebar > Button.nav-active {
         background: #3a3a22;
-        color: #e0ed5e;
+        color: #00ED5E;
         text-style: bold;
-        border-left: thick #e0ed5e;
+        border-left: thick #00ED5E;
     }
 
     /* ── filter bar ──────────────────────────────────── */
@@ -825,12 +849,12 @@ class RunningTUI(App):
         margin: 0 1 0 0;
         padding: 0 2;
         background: #202020;
-        border: round #303030;
+        border: round #00ED5E;
         content-align: center middle;
     }
     #fl-brand {
         width: 20;
-        color: #e0ed5e;
+        color: #00ED5E;
         text-style: bold;
         content-align: left middle;
     }
@@ -853,19 +877,19 @@ class RunningTUI(App):
     #fl-year {
         width: 10;
         background: #2b3016;
-        color: #e0ed5e;
-        border: round #636a2d;
+        color: #00ED5E;
+        border: round #00ED5E;
     }
     #fl-type { width: 8; }
     .filter-chip:hover {
         background: #2b2b2b;
-        color: #f0f777;
-        border: round #5b5b5b;
+        color: #00ED5E;
+        border: round #00ED5E;
     }
     .filter-chip:focus {
         background: #323717;
-        color: #f0f777;
-        border: round #8d9740;
+        color: #00ED5E;
+        border: round #00ED5E;
     }
 
     #list-left { width: 45%; min-width: 40; border: solid #404040; background: #171717; }
@@ -880,7 +904,7 @@ class RunningTUI(App):
     DataTable { height: 100%; }
 
     DataTable > .datatable--header { background: #262626; color: #d4d4d8; }
-    DataTable > .datatable--cursor { background: #3a3a22; color: #e0ed5e; }
+    DataTable > .datatable--cursor { background: #3a3a22; color: #00ED5E; }
     DataTable > .datatable--hover { background: #262626; }
 
     /* ── detail / stats / places / grid views ────────── */

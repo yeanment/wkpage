@@ -76,6 +76,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/95/33/9f094b5e32bc0927acf282199d35c384092dd73505c88fadb69292106eaf/bitstruct-8.11.1.tar.gz", hash = "sha256:4e7b8769c0f09fee403d0a5f637f8b575b191a79a92e140811aa109ce7461f0c", size = 34140, upload-time = "2020-11-19T09:30:04.021Z" }
 
 [[package]]
+name = "bs4"
+version = "0.0.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "beautifulsoup4" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c9/aa/4acaf814ff901145da37332e05bb510452ebed97bc9602695059dd46ef39/bs4-0.0.2.tar.gz", hash = "sha256:a48685c58f50fe127722417bae83fe6badf500d54b55f7e39ffe43b798653925", size = 698, upload-time = "2024-01-17T18:15:47.371Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/51/bb/bf7aab772a159614954d84aa832c129624ba6c32faa559dfb200a534e50b/bs4-0.0.2-py2.py3-none-any.whl", hash = "sha256:abf8742c0805ef7f662dce4b51cca104cffe52b835238afc169142ab9b3fbccc", size = 1189, upload-time = "2024-01-17T18:15:48.613Z" },
+]
+
+[[package]]
 name = "cairocffi"
 version = "1.7.1"
 source = { registry = "https://pypi.org/simple" }
@@ -423,6 +435,15 @@ wheels = [
 ]
 
 [[package]]
+name = "html-parser"
+version = "0.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "ply" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/fa/ae/4b752c60868d26d6d14e89882ade7204fd73543e1bde64b6e9b01c1d9856/html-parser-0.2.tar.gz", hash = "sha256:8c61bde2c4e558daf790cd95daf7aa06d2a07699caaa6ec3f34b76966e2332f8", size = 904, upload-time = "2016-05-04T23:41:34.892Z" }
+
+[[package]]
 name = "httpcore"
 version = "1.0.9"
 source = { registry = "https://pypi.org/simple" }
@@ -667,7 +688,7 @@ wheels = [
 
 [[package]]
 name = "openai"
-version = "1.97.1"
+version = "1.88.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
@@ -679,9 +700,9 @@ dependencies = [
     { name = "tqdm" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a6/57/1c471f6b3efb879d26686d31582997615e969f3bb4458111c9705e56332e/openai-1.97.1.tar.gz", hash = "sha256:a744b27ae624e3d4135225da9b1c89c107a2a7e5bc4c93e5b7b5214772ce7a4e", size = 494267, upload-time = "2025-07-22T13:10:12.607Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/5a/ea/bbeef604d1fe0f7e9111745bb8a81362973a95713b28855beb9a9832ab12/openai-1.88.0.tar.gz", hash = "sha256:122d35e42998255cf1fc84560f6ee49a844e65c054cd05d3e42fda506b832bb1", size = 470963, upload-time = "2025-06-17T05:04:45.856Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ee/35/412a0e9c3f0d37c94ed764b8ac7adae2d834dbd20e69f6aca582118e0f55/openai-1.97.1-py3-none-any.whl", hash = "sha256:4e96bbdf672ec3d44968c9ea39d2c375891db1acc1794668d8149d5fa6000606", size = 764380, upload-time = "2025-07-22T13:10:10.689Z" },
+    { url = "https://files.pythonhosted.org/packages/f4/03/ef68d77a38dd383cbed7fc898857d394d5a8b0520a35f054e7fe05dc3ac1/openai-1.88.0-py3-none-any.whl", hash = "sha256:7edd7826b3b83f5846562a6f310f040c79576278bf8e3687b30ba05bb5dff978", size = 734293, upload-time = "2025-06-17T05:04:43.858Z" },
 ]
 
 [[package]]
@@ -785,6 +806,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/f9/e2/3e91f31a7d2b083fe6ef3fa267035b518369d9511ffab804f839851d2779/pluggy-1.6.0.tar.gz", hash = "sha256:7dcc130b76258d33b90f61b658791dede3486c3e6bfb003ee5c9bfb396dd22f3", size = 69412, upload-time = "2025-05-15T12:30:07.975Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/54/20/4d324d65cc6d9205fabedc306948156824eb9f0ee1633355a8f7ec5c66bf/pluggy-1.6.0-py3-none-any.whl", hash = "sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746", size = 20538, upload-time = "2025-05-15T12:30:06.134Z" },
+]
+
+[[package]]
+name = "ply"
+version = "3.11"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/e5/69/882ee5c9d017149285cab114ebeab373308ef0f874fcdac9beb90e0ac4da/ply-3.11.tar.gz", hash = "sha256:00c7c1aaa88358b9c765b6d3000c6eec0ba42abca5351b095321aef446081da3", size = 159130, upload-time = "2018-02-15T19:01:31.097Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a3/58/35da89ee790598a0700ea49b2a66594140f44dec458c07e8e3d4979137fc/ply-3.11-py2.py3-none-any.whl", hash = "sha256:096f9b8350b65ebd2fd1346b12452efe5b9607f7482813ffca50c22722a807ce", size = 49567, upload-time = "2018-02-15T19:01:27.172Z" },
 ]
 
 [[package]]
@@ -1038,95 +1068,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/c0/8f/0722ca900cc807c13
 wheels = [
     { url = "https://files.pythonhosted.org/packages/82/3b/64d4899d73f91ba49a8c18a8ff3f0ea8f1c1d75481760df8c68ef5235bf5/rich-15.0.0-py3-none-any.whl", hash = "sha256:33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb", size = 310654, upload-time = "2026-04-12T08:24:02.83Z" },
 ]
-
-[[package]]
-name = "running-page"
-version = "2.5.1"
-source = { editable = "." }
-dependencies = [
-    { name = "aiofiles" },
-    { name = "appdirs" },
-    { name = "arrow" },
-    { name = "cairosvg" },
-    { name = "certifi" },
-    { name = "cloudscraper" },
-    { name = "colour" },
-    { name = "duckdb" },
-    { name = "eviltransform" },
-    { name = "fit-tool" },
-    { name = "garmin-fit-sdk" },
-    { name = "garth" },
-    { name = "geopy" },
-    { name = "gpxpy" },
-    { name = "haversine" },
-    { name = "httpx" },
-    { name = "lxml" },
-    { name = "numpy" },
-    { name = "openai" },
-    { name = "polyline" },
-    { name = "pycryptodome" },
-    { name = "pyyaml" },
-    { name = "rich" },
-    { name = "s2sphere" },
-    { name = "sqlalchemy" },
-    { name = "stravalib" },
-    { name = "stravaweblib" },
-    { name = "svglib" },
-    { name = "svgwrite" },
-    { name = "tcxreader" },
-    { name = "tenacity" },
-    { name = "textual" },
-    { name = "timezonefinder", marker = "sys_platform == 'win32'" },
-    { name = "tzfpy", marker = "sys_platform != 'win32'" },
-    { name = "tzlocal" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "pytest" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "aiofiles" },
-    { name = "appdirs", specifier = ">=1.4.0" },
-    { name = "arrow" },
-    { name = "cairosvg", specifier = ">=2.7.1" },
-    { name = "certifi", specifier = "==2025.1.31" },
-    { name = "cloudscraper" },
-    { name = "colour", specifier = ">=0.1.5" },
-    { name = "duckdb" },
-    { name = "eviltransform" },
-    { name = "fit-tool" },
-    { name = "garmin-fit-sdk" },
-    { name = "garth" },
-    { name = "geopy" },
-    { name = "gpxpy", specifier = "==1.6.2" },
-    { name = "haversine", specifier = "==2.8.0" },
-    { name = "httpx" },
-    { name = "lxml" },
-    { name = "numpy" },
-    { name = "openai" },
-    { name = "polyline" },
-    { name = "pycryptodome" },
-    { name = "pyyaml" },
-    { name = "rich" },
-    { name = "s2sphere" },
-    { name = "sqlalchemy" },
-    { name = "stravalib", specifier = "==0.10.4" },
-    { name = "stravaweblib" },
-    { name = "svglib", specifier = ">=1.5.1" },
-    { name = "svgwrite", specifier = ">=1.1.9" },
-    { name = "tcxreader" },
-    { name = "tenacity" },
-    { name = "textual" },
-    { name = "timezonefinder", marker = "sys_platform == 'win32'" },
-    { name = "tzfpy", marker = "sys_platform != 'win32'" },
-    { name = "tzlocal" },
-]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=9.0.3" }]
 
 [[package]]
 name = "s2sphere"
@@ -1415,3 +1356,98 @@ sdist = { url = "https://files.pythonhosted.org/packages/0b/02/ae6ceac1baeda5308
 wheels = [
     { url = "https://files.pythonhosted.org/packages/f4/24/2a3e3df732393fed8b3ebf2ec078f05546de641fe1b667ee316ec1dcf3b7/webencodings-0.5.1-py2.py3-none-any.whl", hash = "sha256:a0af1213f3c2226497a97e2b3aa01a7e4bee4f403f95be16fc9acd2947514a78", size = 11774, upload-time = "2017-04-05T20:21:32.581Z" },
 ]
+
+[[package]]
+name = "workouts-page"
+version = "2.5.1"
+source = { editable = "." }
+dependencies = [
+    { name = "aiofiles" },
+    { name = "appdirs" },
+    { name = "arrow" },
+    { name = "bs4" },
+    { name = "cairosvg" },
+    { name = "certifi" },
+    { name = "cloudscraper" },
+    { name = "colour" },
+    { name = "duckdb" },
+    { name = "eviltransform" },
+    { name = "fit-tool" },
+    { name = "garmin-fit-sdk" },
+    { name = "garth" },
+    { name = "geopy" },
+    { name = "gpxpy" },
+    { name = "haversine" },
+    { name = "html-parser" },
+    { name = "httpx" },
+    { name = "lxml" },
+    { name = "numpy" },
+    { name = "openai" },
+    { name = "polyline" },
+    { name = "pycryptodome" },
+    { name = "pyyaml" },
+    { name = "rich" },
+    { name = "s2sphere" },
+    { name = "sqlalchemy" },
+    { name = "stravalib" },
+    { name = "stravaweblib" },
+    { name = "svglib" },
+    { name = "svgwrite" },
+    { name = "tcxreader" },
+    { name = "tenacity" },
+    { name = "textual" },
+    { name = "timezonefinder", marker = "sys_platform == 'win32'" },
+    { name = "tzfpy", marker = "sys_platform != 'win32'" },
+    { name = "tzlocal" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "aiofiles" },
+    { name = "appdirs", specifier = ">=1.4.0" },
+    { name = "arrow" },
+    { name = "bs4" },
+    { name = "cairosvg", specifier = ">=2.7.1" },
+    { name = "certifi", specifier = "==2025.1.31" },
+    { name = "cloudscraper" },
+    { name = "cloudscraper", specifier = "==1.2.71" },
+    { name = "colour", specifier = ">=0.1.5" },
+    { name = "duckdb" },
+    { name = "eviltransform" },
+    { name = "fit-tool" },
+    { name = "garmin-fit-sdk" },
+    { name = "garth" },
+    { name = "geopy" },
+    { name = "gpxpy", specifier = "==1.6.2" },
+    { name = "haversine", specifier = "==2.8.0" },
+    { name = "html-parser" },
+    { name = "httpx" },
+    { name = "lxml" },
+    { name = "numpy" },
+    { name = "openai" },
+    { name = "openai", specifier = "==1.88.0" },
+    { name = "polyline" },
+    { name = "pycryptodome" },
+    { name = "pyyaml" },
+    { name = "rich", specifier = ">=15.0.0" },
+    { name = "s2sphere" },
+    { name = "sqlalchemy" },
+    { name = "stravalib", specifier = "==0.10.4" },
+    { name = "stravaweblib" },
+    { name = "svglib", specifier = ">=1.5.1" },
+    { name = "svgwrite", specifier = ">=1.1.9" },
+    { name = "tcxreader" },
+    { name = "tenacity" },
+    { name = "textual" },
+    { name = "timezonefinder", marker = "sys_platform == 'win32'" },
+    { name = "tzfpy", marker = "sys_platform != 'win32'" },
+    { name = "tzlocal" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=9.0.3" }]
