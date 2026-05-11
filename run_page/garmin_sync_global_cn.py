@@ -5,13 +5,11 @@ Copy most code from https://github.com/cyberjunky/python-garminconnect
 
 import argparse
 import asyncio
-import logging
 import os
 import sys
 
-import httpx
-from config import JSON_FILE, SQL_FILE
-from config import FIT_FOLDER, GPX_FOLDER
+
+from config import FIT_FOLDER, GPX_FOLDER, JSON_FILE, SQL_FILE
 from garmin_sync import Garmin, get_downloaded_ids
 from garmin_sync import download_new_activities
 # from utils import make_activities_file
@@ -58,7 +56,7 @@ if __name__ == "__main__":
     downloaded_fit = get_downloaded_ids(FIT_FOLDER)
     downloaded_gpx = get_downloaded_ids(GPX_FOLDER)
     downloaded_activity = list(set(downloaded_fit + downloaded_gpx))
-    
+
     folder = FIT_FOLDER
     loop = asyncio.get_event_loop()
     future = asyncio.ensure_future(
@@ -85,7 +83,11 @@ if __name__ == "__main__":
             to_upload_files.append(os.path.join(GPX_FOLDER, f"{i}.gpx"))
 
     print("Files to sync:" + " ".join(to_upload_files))
-    garmin_cn_client = Garmin(b64_string_cn, "CN", is_only_running)
+    garmin_cn_client = Garmin(
+        b64_string_cn, 
+        "CN", 
+        is_only_running,
+    )
     loop = asyncio.get_event_loop()
     future = asyncio.ensure_future(
         garmin_cn_client.upload_activities_files(to_upload_files)
